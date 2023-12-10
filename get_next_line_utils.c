@@ -6,7 +6,7 @@
 /*   By: moer-ret <moer-ret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 03:02:21 by moer-ret          #+#    #+#             */
-/*   Updated: 2023/12/09 20:47:28 by moer-ret         ###   ########.fr       */
+/*   Updated: 2023/12/10 09:01:34 by moer-ret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,26 @@ char	*ft_strchr(char *str, int c)
 	return (NULL);
 }
 
+char	*ft_strdup(char *str)
+{
+	size_t	i;
+	char	*ptr;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	ptr = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!ptr)
+		return (NULL);
+	while (str[i])
+	{
+		ptr[i] = str[i];
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
+}
+
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
@@ -47,10 +67,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*ptr;
 
 	if (!s1)
-	{
-		s1 = malloc(1);
-		s1[0] = '\0';
-	}
+		s1 = ft_strdup("");
 	if (!s1 || !s2)
 		return (NULL);
 	j = 0;
@@ -58,9 +75,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!ptr)
 		return (NULL);
-	while (s1[++i])
+	while (s1 && s1[++i])
 		ptr[i] = s1[i];
-	while (s2[j])
+	while (s2 && s2[j])
 		ptr[i++] = s2[j++];
 	ptr[i] = '\0';
 	free(s1);

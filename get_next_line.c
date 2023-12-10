@@ -6,64 +6,65 @@
 /*   By: moer-ret <moer-ret@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 03:02:25 by moer-ret          #+#    #+#             */
-/*   Updated: 2023/12/09 20:42:58 by moer-ret         ###   ########.fr       */
+/*   Updated: 2023/12/10 17:28:27 by moer-ret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*read_new_line(char *tmp)
+char	*read_line(char *tmp)
 {
 	int		i;
-	char	*new_line;
+	char	*line;
 
-	if (!tmp)
+	if (!tmp || !tmp[0])
 		return (NULL);
 	i = 0;
 	while (tmp[i] && tmp[i] != '\n')
 		i++;
 	if (tmp[i] == '\n')
 		i++;
-	new_line = malloc(sizeof(char) * (i + 1));
-	if (!new_line)
+	line = malloc(sizeof(char) * (i + 1));
+	if (!line)
 		return (NULL);
 	i = 0;
 	while (tmp[i] && tmp[i] != '\n')
 	{
-		new_line[i] = tmp[i];
+		line[i] = tmp[i];
 		i++;
 	}
 	if (tmp[i] == '\n')
-		new_line[i++] = '\n';
-	new_line[i] = '\0';
-	return (new_line);
+		line[i++] = '\n';
+	line[i] = '\0';
+	return (line);
 }
 
-char	*get_new_line(char *tmp)
+char	*get_line(char *tmp, int i)
 {
-	int		i;
 	int		j;
-	char	*new_line;
+	char	*line;
 
-	i = 0;
 	while (tmp[i] && tmp[i] != '\n')
 		i++;
 	if (tmp[i] == '\0')
+	{
+		free(tmp);
 		return (NULL);
+	}
 	if (tmp[i] == '\n')
 		i++;
-	new_line = malloc(sizeof(char) * (ft_strlen(tmp) - i + 1));
-	if (!new_line)
+	line = malloc(sizeof(char) * (ft_strlen(tmp) - i + 1));
+	if (!line)
 		return (NULL);
 	j = 0;
 	while (tmp[i + j])
 	{
-		new_line[j] = tmp[i + j];
+		line[j] = tmp[i + j];
 		j++;
 	}
-	new_line[j] = '\0';
-	free (tmp);
-	return (new_line);
+	line[j] = '\0';
+	free(tmp);
+	return (line);
 }
 
 char	*get_next_line(int fd)
@@ -90,13 +91,14 @@ char	*get_next_line(int fd)
 		tmp = ft_strjoin(tmp, buffer);
 	}
 	free (buffer);
-	buffer = read_new_line(tmp);
-	tmp = get_new_line(tmp);
+	buffer = read_line(tmp);
+	tmp = get_line(tmp, 0);
 	return (buffer);
 }
-// int main()
+// int main(int ac, char **av)
 // {
-// 	int fd = open("test.txt", O_RDWR);
+// 	int	fd = open("test.txt", O_RDWR);
+
 // 	char *str = get_next_line(fd);
 // 	while (str)
 // 	{
@@ -104,4 +106,5 @@ char	*get_next_line(int fd)
 // 		free(str);
 // 		str = get_next_line(fd);
 // 	}
+// 	//system("leaks a.out");
 // }
